@@ -19,6 +19,6 @@ app.get('*', (req,res) =>{
 });
 
 const port = process.env.PORT || 5001;
-app.listen(port);
+app.listen(port, '127.0.0.1');
 
 console.log('App is listening on port ' + port);
