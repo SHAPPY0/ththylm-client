@@ -3,7 +3,7 @@ import { withRouter,Link } from 'react-router-dom';
 import {CONFIGS} from '../../config';
 import { Axios_Instance, Ax } from '../../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../../config/routes';
-import {Notification, getUserDetails} from '../../utils';
+import {Notification, getUserDetails, GetCacheSelectedChannel, GetCacheChannels} from '../../utils';
 
 class Header extends Component {
     constructor(){
@@ -22,23 +22,32 @@ class Header extends Component {
 
         let urlName = window.location.pathname;
         
-        let { selectedChannel, userDetails } = this.state;
+        let { selectedChannel, userDetails, channels } = this.state;
         userDetails = getUserDetails();
-        if((urlName != '/' && urlName != '/signin' && urlName != '/signup') || Object.keys(userDetails).length > 0) this.fetchChannels();
-        let selected = localStorage.getItem("selItem");
+        let selected = GetCacheSelectedChannel();
+        let channelsList = GetCacheChannels();
+        if(!channelsList || (channelsList && !channelsList.length)){
+            if(((urlName != '/' && urlName != '/signin' && urlName != '/signup') || Object.keys(userDetails).length > 0 )) this.fetchChannels();
+        }else{
+            channels = channelsList;
+            this.setState({ channels });
+        }
+        
         selectedChannel = selected;
         this.setState({ selectedChannel, userDetails });
     }
 
     _logout(){
         localStorage.removeItem(CONFIGS.uLocal);
+        sessionStorage.removeItem("selItem");
+        sessionStorage.removeItem("channels");
         this.props.history.push('/');
     }
 
     onChangeChannel(e){
         let { selectedChannel } = this.state;
         selectedChannel = e.target.value;
-        localStorage.setItem("selItem", selectedChannel);
+        sessionStorage.setItem("selItem", selectedChannel);
         this.setState({ selectedChannel }); 
     }
     SearchChange(e){
@@ -60,15 +69,14 @@ class Header extends Component {
                 return;
             }
             if(_resp &&_resp.data && _resp.data.success){
-                
                 let { channels, selectedChannel } = this.state;
                 let data = _resp.data.data.channels;
                 channels = data; 
-                localStorage.setItem("selItem", channels.length ? channels[0].id : []);
+                sessionStorage.setItem("selItem", channels.length ? channels[0].id : "");
                 sessionStorage.setItem("channels", JSON.stringify(channels));
                 this.setState({ channels });
             }
-        }catch(ex){console.log("sdp")
+        }catch(ex){
             Notification({
                 show:true,
                 data:ex.response ?ex.response.data : ex});
@@ -143,10 +151,10 @@ render() {
                                             <p style={{"fontSize":"10px"}}>{obj.type || '--'} | {obj.platform || '--'}</p>
                                             <p style={{"fontSize":"10px"}}>
                                                 {obj.added_watchlist === 1 && 
-                                                    <span className="search_link" >Added To Watchlist</span>
+                                                    <span className="search_link" style={{"color":"#959ca2"}}>Added To Watchlist</span>
                                                 }
                                                 {obj.added_watchlist === 0 && 
-                                                    <span className="search_link" onClick={this.addToWatchlist.bind(this, obj)}>Add To Watchlist</span>
+                                                    <span className="search_link"  onClick={this.addToWatchlist.bind(this, obj)}>Add To Watchlist</span>
                                                 } </p>
                                         </div>
                                     </div>
@@ -159,7 +167,7 @@ render() {
             </div>
             <div className="col-md-3 col-sm-3 col-xs-6">
                 <div className="pull-right">
-                    {this.state.userDetails.user_type === 1 &&
+                    {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) &&
                          <select style={{"border":"none",  "background":'none'}} value={this.state.selectedChannel} name="channels" onChange={this.onChangeChannel.bind(this)}>
                          {this.state.channels.map((obj, k)=>
                              <option key={k} value={obj.id}>{obj.channel_name}</option>
@@ -168,15 +176,15 @@ render() {
                      </select>
                     }
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <i className="icon-magnifier icons" style={{"cursor":"pointer", "marginRight":"20px"}} onClick={this.toggleSearch.bind(this)}></i> 
+                    <i className="icon-magnifier icons" style={{"cursor":"pointer", "marginRight":"20px", "marginLeft":"20px"}} onClick={this.toggleSearch.bind(this)}></i> 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
                     <div className="dropdown">
                         <span className="dropbtn"> <i className="icon-user icons"></i></span>
                             <div className="dropdown-content">
-                            {this.state.userDetails.user_type === 1 && <a href="/feeds" >&nbsp;Your Feeds</a>}
-                            {this.state.userDetails.user_type === 1 && <a href="/events" >&nbsp;Your Events</a>}
-                            {this.state.userDetails.user_type === 1 &&   <a href="/channels" >&nbsp;Your Channels</a>}
+                            {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) && <a href="/feeds" >&nbsp;Your Feeds</a>}
+                            {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) && <a href="/events" >&nbsp;Your Events</a>}
+                            {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) &&   <a href="/channels" >&nbsp;Your Channels</a>}
                                 <a href="/watchlists" >&nbsp;Your Watchlists</a>
                                 <a href="javascript:void" onClick={this._logout.bind(this)}>&nbsp;Logout</a>
                             </div>

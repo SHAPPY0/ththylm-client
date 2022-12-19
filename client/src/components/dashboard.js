@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Axios_Instance} from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
-import { checkAuthorization, getUserDetails, FormatDate, GetStatusByDateTime, Notification,DateDiffFormat } from '../utils';
+import { checkAuthorization, getUserDetails, 
+        FormatDate, GetStatusByDateTime, 
+        Notification,DateDiffFormat, 
+        GetCacheSelectedChannel, GetCacheChannels } from '../utils';
 
 class Dashboard extends Component {
     constructor(){
@@ -12,7 +15,8 @@ class Dashboard extends Component {
             wishTitle : 'Good Morning',
             feeds:{"today":[], "upcoming":[],"completed":[]},
             feed:"",
-            feed_posts:[]
+            feed_posts:[],
+            selectedChannel:{}
         }
     }
 
@@ -21,9 +25,9 @@ class Dashboard extends Component {
         this.setWishTitle();
         let details = getUserDetails();
         this.setState({user:details});
+        this.findSelectedChannel();
         this.fetchFeedPosts();
         this.fetchFeeds();
-        
     };
 
     setWishTitle(){
@@ -39,6 +43,18 @@ class Dashboard extends Component {
         }
         this.setState({wishTitle});
     }; 
+
+    findSelectedChannel(){
+        let { selectedChannel } = this.state;
+        // selectedChannel = {};
+        let selectedId = GetCacheSelectedChannel();
+        let channels = GetCacheChannels();
+        if(channels && channels.length){
+            selectedChannel = channels.find(obj => obj.id == selectedId);
+            this.setState({ selectedChannel });
+        } 
+        
+    };
 
     async fetchFeeds(){
         try{
@@ -96,16 +112,22 @@ class Dashboard extends Component {
     };
     
     async PostFeed(){
-        let { feed } = this.state;
+        let { feed, selectedChannel } = this.state;
         if(!feed){
             Notification({
                 show:true,
                 data:{success:false, msg:"Nothing to post"}});
             return;
         };
+        if(!selectedChannel.id){
+            Notification({
+                show:true,
+                data:{success:false, msg:"Something went wrong! Please try again"}});
+            return;
+        }
         let reqBody  = {
                 "feed":feed, 
-                "channel_id":localStorage.getItem("selItem"), 
+                "channel_id":selectedChannel.id, 
                 "type":"text"
             };
         try{
@@ -128,6 +150,9 @@ class Dashboard extends Component {
     redirectUrl(url){
         window.open(url.String, "_blank")
     }
+    createMarkup(text){
+        return {_html: text}
+    }
   render() {
             return (
                 <div className="main-container">
@@ -138,10 +163,14 @@ class Dashboard extends Component {
                         <div className="row">
                             <div className="col-md-6 col-sm-6">
                                 <h6 className="theme-color"><b>Feeds</b></h6>
-                                {this.state.user.user_type === 1 && <>
+                                {(this.state.user.user_type === 1 || this.state.user.user_type === 3)&& <>
                                     <textarea rows="2" className="form-control" name="feed" placeholder="Write to share..." onChange={this.OnFeedFieldChange.bind(this)}></textarea>
                                     <div style={{"float":"right", "marginTop":"5px"}}>
-                                        <button className="btn btn-primary" onClick={this.PostFeed.bind(this)}>POST</button>
+                                        <span style={{"marginRight":"10px"}}>
+                                            {!Object.keys(this.state.selectedChannel).length && <small style={{"color":"#f48989"}}>*Please add channel first! </small>}
+                                            {Object.keys(this.state.selectedChannel).length > 0 && <small style={{"color":"rgb(131 140 150)"}}>Posting as <b>{this.state.selectedChannel.channel_name || '--'}</b></small>}
+                                        </span>
+                                        <button className="btn btn-primary" onClick={this.PostFeed.bind(this)} disabled={Object.keys(this.state.selectedChannel).length === 0}>POST</button>
                                     </div>
                                 </>}
 
@@ -154,8 +183,8 @@ class Dashboard extends Component {
                                                 
                                                 <p>{obj.channel_name}</p>
                                             </div>
-                                            <div style={{"clear":"both"}}>
-                                                <p>{obj.feed}</p>
+                                            <div style={{"clear":"both","marginTop":"20px"}}>
+                                                <p dangerouslySetInnerHTML={{"__html": obj.feed}}></p>
                                                 <small style={{fontSize:"10px", color:"#9fa2a4"}}>{DateDiffFormat(obj.created_at) || '--'}</small>
                                             </div>
                                         </div>

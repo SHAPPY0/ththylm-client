@@ -72,6 +72,7 @@ class AddChannels extends Component {
                 show: true,
                 data:{success:_resp.data.success, msg:_resp.data.message || _resp.data.msg}
               });
+              sessionStorage.removeItem("channels");
               this.props.history.push('/channels');
         }catch(ex){
             Notification({

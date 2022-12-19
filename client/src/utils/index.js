@@ -61,7 +61,7 @@ export const DateDiffFormat = (datetime)=>{
     Object.keys(VALUES).forEach((key)=>{
         res[key] = Math.floor(d/VALUES[key]);
         d -= res[key] * VALUES[key];
-    }); console.log("res", res)
+    }); 
     if(res.year) return `${res.year} Years ago` 
     else if(res.month) return `${res.month} Months ago`
     else if(res.week) return `${res.week} Weeks ago`
@@ -92,3 +92,14 @@ export const GetStatusByDateTime = (startTime, endTime) => {
         return "Upcoming";
     }
 }
+
+export const GetCacheSelectedChannel = () =>{
+        let r = sessionStorage.getItem("selItem");
+        return r;
+}
+export const GetCacheChannels = () =>{
+    let r = sessionStorage.getItem("channels");
+    return r ? JSON.parse(r) : [];
+}
+
+ 

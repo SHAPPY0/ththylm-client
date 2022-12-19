@@ -4,7 +4,7 @@ import { Axios_Instance, Ax } from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import { checkAuthorization, getUserDetails } from '../utils';
 import { EVENT_REQ_VALIDATOR } from '../utils/validators';
-import {Notification} from '../utils';
+import {Notification, GetCacheSelectedChannel} from '../utils';
 
 class AddEvents extends Component {
     constructor(){
@@ -44,7 +44,7 @@ class AddEvents extends Component {
     async _addEvent(e){
         e.preventDefault();
         let { form } = this.state;
-        form.channel_id = localStorage.getItem("selItem")
+        form.channel_id = GetCacheSelectedChannel();
         let _err = EVENT_REQ_VALIDATOR(form);
         if(_err && _err.is_error){
             Notification({
