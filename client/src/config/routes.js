@@ -1,7 +1,7 @@
 // export const BASEURL = 'http://0.0.0.0:8081/api';
 // export const FILEURL = 'http://localhost:8081/';
-export const BASEURL = 'http://13.235.19.81:8081/api';
-export const FILEURL = 'http://13.235.19.81:8081/';
+export const BASEURL = 'http://3.7.63.155:8081/api';
+export const FILEURL = 'http://3.7.63.155:8081/';
 
 export const ROUTES = {
     'register':'/users/register',
