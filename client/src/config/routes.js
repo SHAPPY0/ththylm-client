@@ -1,7 +1,7 @@
 // export const BASEURL = 'http://0.0.0.0:8081/api';
 // export const FILEURL = 'http://localhost:8081/';
-export const BASEURL = 'http://3.7.63.155:8081/api';
-export const FILEURL = 'http://3.7.63.155:8081/';
+export const BASEURL = 'http://api.thehylm.com/api';
+export const FILEURL = 'http://api.thehylm.com/';
 
 export const ROUTES = {
     'register':'/users/register',
@@ -12,7 +12,9 @@ export const ROUTES = {
     'add_events':'/events/add',
     'fetch_events':'/events/fetch',
     'add_watchlist':'/channels/add_watchlist',
+    'remove_watchlist':'/channels/remove-watchlist/:channelId',
     'fetch_watchlist':'/channels/fetch_watchlists',
+    'delete_channel':'/channels/delete/:channelId',
     'event_feeds':'/events/feeds',
     'delete_event':'/events/delete/:eventId',
     'update_event':'/events/update',

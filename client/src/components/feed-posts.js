@@ -158,7 +158,7 @@ class FeedPosts extends Component {
                                                     </ul>
                                                 </div>}
                                             </div>
-                                            <div style={{"clear":"both"}}>
+                                            <div style={{"clear":"both", "marginTop":"20px"}}>
                                                 <p>{obj.feed}</p>
                                                 <small style={{fontSize:"10px", color:"#9fa2a4"}}>{DateDiffFormat(obj.created_at) || '--'}</small>
                                             </div>

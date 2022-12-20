@@ -13,7 +13,8 @@ class Channles extends Component {
             form:{
                 "response":[],
                 "selectedChannel":{}
-            }
+            },
+            "showOption" : -1
         }
     }
 
@@ -57,6 +58,42 @@ class Channles extends Component {
 
     }
 
+    openOptions(k){
+        let { showOption } = this.state;
+        if(showOption === k){
+            showOption = -1;
+        }else{
+            showOption = k;
+        }
+        this.setState({showOption});
+    }
+
+    onRemoveWatchList(channel){
+        if(channel){
+            let r = window.confirm("Are you sure to remove this from your watchlist?");
+            if(r){
+                this.onRemoveFromWatchList(channel.channel_id);
+            }
+        }
+    }
+
+    async onRemoveFromWatchList(channelId){
+        try{
+            let _resp = await Axios_Instance.put(`${ROUTES.remove_watchlist}`.replace(":channelId", channelId));
+            
+            if(_resp && _resp.data && _resp.data.success){
+                Notification({
+                    show:true,
+                    data:{success:true, msg:"Channel removed from watchlist successfully"}});
+                this.fetchChannels();
+            }
+        }catch(ex){
+            Notification({
+                show:true,
+                data:ex ? (ex.response ?ex.response.data : ex) : "Exception ocurred"});
+        }
+    }
+
   render() {
            
             return (
@@ -81,7 +118,16 @@ class Channles extends Component {
                                             </div>
                                         </div>
                                         <div className="col-md-8 col-sm-8">
-                                            <span style={{"cursor":"pointer", "color":"blue"}} onClick={this.OnSelectChannel.bind(this, obj)}>{obj.channel_name}</span>
+                                            <p>
+                                                <span style={{"cursor":"pointer", "color":"blue"}} onClick={this.OnSelectChannel.bind(this, obj)}>{obj.channel_name}</span>
+                                               {obj.channel_name.toLowerCase().indexOf('thehylm') === -1 && <span> <i className="icon-options-vertical icons"  style={{"float":"right", "cursor":"pointer"}} onClick={this.openOptions.bind(this, k)}></i></span> }
+                                                {k === this.state.showOption && <div className="optionsDropDown" style={{"width":"130px"}}>
+                                                    <ul>
+                                                        {/* <li onClick={this.onEditObj.bind(this, obj)}>Edit</li> */}
+                                                        <li onClick={this.onRemoveWatchList.bind(this, obj)}>Remove From Watchlist</li>
+                                                    </ul>
+                                                </div>}
+                                            </p>
                                             <small style={{display:"block", "color":"#ccc"}}>{obj.type} | {obj.platform}</small>
                                             {/* <Link to={"/add-events"} style={{"fontSize":"10px"}}>Add Event</Link> */}
                                         </div>

@@ -14,7 +14,8 @@ class Channles extends Component {
             form:{
                 "response":[],
                 "selectedChannel":{}
-            }
+            },
+            "showOption":-1
         }
     }
 
@@ -34,9 +35,10 @@ class Channles extends Component {
                 return;
             }
             if(_resp.data && _resp.data.success){
-                let { form } = this.state;
+                let { form, showOption } = this.state;
                 form.response = _resp.data.data.channels;
-                this.setState({ form });
+                showOption = -1
+                this.setState({ form, showOption });
             }
         }catch(ex){
             Notification({
@@ -46,7 +48,6 @@ class Channles extends Component {
     }
 
     OnSelectChannel(channel){
-        console.log("asadsd", channel)
         let { selectedChannel } = this.state;
         selectedChannel = channel;
         this.setState({ selectedChannel });
@@ -57,6 +58,41 @@ class Channles extends Component {
         selectedChannel = {};
         this.setState({selectedChannel});
 
+    }
+
+    openOptions(k){
+        let { showOption } = this.state;
+        if(showOption === k){
+            showOption = -1;
+        }else{
+            showOption = k;
+        }
+        this.setState({showOption});
+    }
+
+    onDeleteObj(channel){
+        if(channel){
+            let r = window.confirm("Are you sure to delete this channel?");
+            if(r){
+                this.onDeleteFeed(channel.id);
+            }
+        }
+    }
+    async onDeleteFeed(id){
+        try{
+            let _resp = await Axios_Instance.delete(`${ROUTES.delete_channel}`.replace(":channelId", id));
+            
+            if(_resp && _resp.data && _resp.data.success){
+                Notification({
+                    show:true,
+                    data:{success:true, msg:"Channel deleted successfully"}});
+                this.fetchChannels();
+            }
+        }catch(ex){
+            Notification({
+                show:true,
+                data:ex ? (ex.response ?ex.response.data : ex) : "Exception ocurred"});
+        }
     }
 
   render() {
@@ -72,8 +108,8 @@ class Channles extends Component {
                         <div className="">
                             <div className="row">
                                 {this.state.form.response.map((obj, k )=>
-                                    <div className="col-md-4 col-sm-4 col-xs-12">
-                                    <div className="card" style={{"height":"auto", "min-height":"auto"}}>
+                                    <div className="col-md-4 col-sm-4 col-xs-12" key={k}>
+                                    <div className="card" style={{"height":"auto", "minHeight":"auto"}}>
                                         <div className="row">
                                         <div className="col-md-4 col-sm-4" >
                                             <div className="channel_logo">
@@ -83,7 +119,16 @@ class Channles extends Component {
                                             </div>
                                         </div>
                                         <div className="col-md-8 col-sm-8">
-                                            <span style={{"cursor":"pointer", "color":"blue"}} onClick={this.OnSelectChannel.bind(this, obj)}>{obj.channel_name}</span>
+                                            <div>
+                                                <span style={{"cursor":"pointer", "color":"blue"}} onClick={this.OnSelectChannel.bind(this, obj)}>{obj.channel_name}</span>
+                                                <span> <i className="icon-options-vertical icons"  style={{"float":"right", "cursor":"pointer"}} onClick={this.openOptions.bind(this, k)}></i></span>
+                                                {k === this.state.showOption && <div className="optionsDropDown" style={{"top":"15px", "width":"100px"}}>
+                                                    <ul>
+                                                        {/* <li onClick={this.onEditObj.bind(this, obj)}>Edit Feed</li> */}
+                                                        <li onClick={this.onDeleteObj.bind(this, obj)}>Delete Channel</li>
+                                                    </ul>
+                                                </div>}
+                                            </div>
                                             <small style={{display:"block", "color":"rgb(178 174 174)"}}>{obj.type} | {obj.platform}</small>
                                             {/* <Link to={"/add-events"} style={{"fontSize":"10px"}}>Add Event</Link> */}
                                             <small style={{display:"block", "color":"rgb(178 174 174)"}}> {DateDiffFormat(obj.created_at)}</small>

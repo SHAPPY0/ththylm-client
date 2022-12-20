@@ -209,7 +209,7 @@ class Dashboard extends Component {
                                                                 {!obj.thumbnail && <div style={{"height":"150px","width":"100%", "background":"#ccc","paddingTop":"25%", "color":"#96999c", "textAlign":"center"}}>No Thumbnail</div>}
                                                                 
                                                                 <p className="live_title" title={obj.title}>{obj.title.substring(0,27) || '--'}{obj.title.length > 27 &&<span>...</span>}</p>
-                                                                <p style={{"fontSize":"11px"}}>{obj.channel_name || '--'}</p>
+                                                                <p style={{"fontSize":"11px", "color":"#828b92"}}>{obj.channel_name || '--'}</p>
                                                                 <p style={{"fontSize":"10px"}}><span>{FormatDate(obj.start_time) || '--'}</span> - <span>{FormatDate(obj.expected_end_time) || '--'}</span> </p>
                                                                 <div> 
                                                                     {obj.status === 'Running' &&  <button className="btn" style={{"fontSize":"10px"}} onClick={this.redirectUrl.bind(this, obj.url)}>Join Now</button>}
