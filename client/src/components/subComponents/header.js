@@ -32,12 +32,14 @@ class Header extends Component {
             channels = channelsList;
             this.setState({ channels });
         }
-        
         selectedChannel = selected;
         this.setState({ selectedChannel, userDetails });
     }
 
     _logout(){
+        let { channels } = this.state;
+        channels = [];
+        this.setState({channels});
         localStorage.removeItem(CONFIGS.uLocal);
         sessionStorage.removeItem("selItem");
         sessionStorage.removeItem("channels");

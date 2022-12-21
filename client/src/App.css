@@ -55,6 +55,12 @@
 }
 .main-container{
   padding: 20px 0px 20px;
+  min-height: 600px;
+}
+.footer_links li{
+  float:left;
+  margin-right: 10px;
+  font-size: 10px;
 }
 p{
   margin-bottom: 0px;
@@ -360,4 +366,10 @@ p{
 }
 .copy_bId{
   margin-left: 10px;
+}
+
+.footer{
+  background-color: #fff;
+  padding:10px 0px;
+  color: rgb(176, 172, 172);
 }

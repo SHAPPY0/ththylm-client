@@ -13,8 +13,7 @@ class AppContainer extends Component {
     }
   
   }
-  componentDidMount() { 
-  } 
+  
 
   render() {
     if(this.props.notification.show){

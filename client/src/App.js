@@ -10,13 +10,15 @@ import Header from './components/subComponents/header';
 import Signup from './components/signup';
 import Signin from './components/signin';
 import AddChannel from './components/add-channel';
-import BuildingDetails from './components/building-details';
-import ManageTenants from './components/manage-tenants';
 import Channels from './components/channels';
 import AddEvents from './components/add-events';
 import Events from './components/events';
 import Watchlists from './components/watchlists';
 import FeedPosts from './components/feed-posts';
+import Footer from './components/subComponents/footer';
+import HowItWorks from './components/how-it-works';
+import Feedback from './components/feedback';
+import Privacy from './components/privacy';
 
 function App() {
   return (
@@ -34,7 +36,11 @@ function App() {
           <Route exact path='/events' component={Events} />
           <Route exact path='/watchlists' component={Watchlists}/>
           <Route exact path='/feeds' component={FeedPosts} />
+          <Route exact path='/how-it-works' component={HowItWorks} />
+          <Route exact path='/feedback' component={Feedback} />
+          <Route exact path='/privacy' component={Privacy} />
         </Switch>
+        <Footer />
         </AppContainer>
       </Router>
     </Provider>
