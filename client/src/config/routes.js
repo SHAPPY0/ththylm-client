@@ -1,7 +1,7 @@
-export const BASEURL = 'http://0.0.0.0:8081/api';
-export const FILEURL = 'http://localhost:8081/';
-// export const BASEURL = 'https://api.thehylm.com/api';
-// export const FILEURL = 'https://api.thehylm.com/';
+// export const BASEURL = 'http://0.0.0.0:8081/api';
+// export const FILEURL = 'http://localhost:8081/';
+export const BASEURL = 'https://api.thehylm.com/api';
+export const FILEURL = 'https://api.thehylm.com/';
 
 export const ROUTES = {
     'register':'/users/register',

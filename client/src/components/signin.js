@@ -67,7 +67,7 @@ class Signup extends Component {
                         <div className="col-md-4 col-sm-4">
                             <div className="logo_plain text-center"><img src={"./assets/images/logo.png"} alt="thePuerta"/></div>
                             <div className="card" style={{"marginTop":"20px"}}>
-                                <GoogleAds />
+                               
                             <div className="contctxt">User SIGNIN</div><br />
                             <div className="formint conForm">
                                 <form>
@@ -88,6 +88,7 @@ class Signup extends Component {
                                 </form>
                             </div>
                             </div>
+                            <GoogleAds />
                         </div>
                         <div className="col-md-4 col-sm-4"></div>
                         </div>
