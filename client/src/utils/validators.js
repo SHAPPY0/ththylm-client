@@ -5,7 +5,7 @@ export const SIGNUP_REQ_VALIDATOR = (req)=>{
     if(!req.hasOwnProperty('email') || !req['email']) _error = {is_error:true, msg:'Email is required'};
     if(!req.hasOwnProperty('password') || !req['password']) _error = {is_error:true, msg:'Password is required'};
     if(!req.hasOwnProperty('cnfpassword') || !req['cnfpassword']) _error = {is_error:true, msg:'Repeat Password is required'};
-    if(req['password'] != req['cnfpassword']) _error = {is_error:true, msg:'Password & Repeat password not matched'};
+    if(req['password'] !== req['cnfpassword']) _error = {is_error:true, msg:'Password & Repeat password not matched'};
     if(!req.hasOwnProperty('user_type') || !req['user_type']) _error = {is_error:true, msg:'User Type is required'};
     
     return _error;

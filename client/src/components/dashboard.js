@@ -50,7 +50,7 @@ class Dashboard extends Component {
         let selectedId = GetCacheSelectedChannel();
         let channels = GetCacheChannels();
         if(channels && channels.length){
-            selectedChannel = channels.find(obj => obj.id == selectedId);
+            selectedChannel = channels.find(obj => obj.id === selectedId);
             this.setState({ selectedChannel });
         } 
         

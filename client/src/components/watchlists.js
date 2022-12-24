@@ -1,6 +1,6 @@
 import React, { Component } from 'react'; 
 import { withRouter, Link } from 'react-router-dom';
-import { Axios_Instance, Ax } from '../utils/axiosInterceptor';
+import { Axios_Instance } from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import { checkAuthorization, getUserDetails } from '../utils';
 import {Notification} from '../utils';
@@ -113,7 +113,7 @@ class Channles extends Component {
                                         <div className="row">
                                         <div className="col-md-4 col-sm-4" >
                                             <div className="channel_logo">
-                                                {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} />}
+                                                {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} alt={obj.channel_name[0]} />}
                                                 {!obj.logo_url && <div className="blankImage">{obj.channel_name[0]}</div>}
                                             </div>
                                         </div>

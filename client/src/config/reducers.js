@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import { ACTION_TYPES} from '../utils/actions';
 
 const isState={

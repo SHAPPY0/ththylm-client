@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; 
 import { withRouter,Link } from 'react-router-dom';
 import {CONFIGS} from '../../config';
-import { Axios_Instance, Ax } from '../../utils/axiosInterceptor';
+import { Axios_Instance } from '../../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../../config/routes';
 import {Notification, getUserDetails, GetCacheSelectedChannel, GetCacheChannels} from '../../utils';
 
@@ -21,13 +21,12 @@ class Header extends Component {
     componentDidMount(){
 
         let urlName = window.location.pathname;
-        
         let { selectedChannel, userDetails, channels } = this.state;
         userDetails = getUserDetails();
         let selected = GetCacheSelectedChannel();
         let channelsList = GetCacheChannels();
         if(!channelsList || (channelsList && !channelsList.length)){
-            if(((urlName != '/' && urlName != '/signin' && urlName != '/signup') || Object.keys(userDetails).length > 0 )) this.fetchChannels();
+            if(((urlName !== '/' && urlName !== '/signin' && urlName !== '/signup') || Object.keys(userDetails).length > 0 )) this.fetchChannels();
         }else{
             channels = channelsList;
             this.setState({ channels });
@@ -71,7 +70,7 @@ class Header extends Component {
                 return;
             }
             if(_resp &&_resp.data && _resp.data.success){
-                let { channels, selectedChannel } = this.state;
+                let { channels } = this.state;
                 let data = _resp.data.data.channels;
                 channels = data; 
                 sessionStorage.setItem("selItem", channels.length ? channels[0].id : "");
@@ -135,7 +134,7 @@ render() {
         <div className="container"> 
             <div className="row"> 
             <div className="col-md-3 col-sm-3 col-xs-6">
-               <h4 style={{"margin":"0px"}}><Link to={"/dashboard"}><img src={"./assets/images/logo.png"} alt="thePuerta"/></Link></h4>
+               <h4 style={{"margin":"0px"}}><Link to={"/dashboard"}><img src={"./assets/images/logo.png"} alt="theHylm"/></Link></h4>
             </div> 
             <div className="col-md-6 col-sm-6 col-xs-6">
                      {this.state.showSearch &&
@@ -146,7 +145,7 @@ render() {
                                 <div className="search_results">
                                    {this.state.search_results.map((obj, k)=>
                                     <div className="EachSearchResult" key={k}>
-                                        {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} style={{"width":"50px", "height":"50px","float":"left","objectFit":"contain"}} />}
+                                        {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} alt={obj.channel_name[0]} style={{"width":"50px", "height":"50px","float":"left","objectFit":"contain"}} />}
                                         {!obj.logo_url && <div className="blankImage" style={{"width":"50px", "height":"50px", "float":"left", "fontSize":"25px"}}>{obj.channel_name[0]}</div>}
                                         <div className="SearchRow">
                                             <p style={{"fontSize":"12px", "color":"#145391"}}><span onClick={this.redirectURL.bind(this, obj.channel_url)} className="theme-color" style={{"cursor":"pointer"}}>{obj.channel_name || '--'}</span></p>
@@ -172,7 +171,7 @@ render() {
                     {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) &&
                          <select style={{"border":"none",  "background":'none'}} value={this.state.selectedChannel} name="channels" onChange={this.onChangeChannel.bind(this)}>
                          {this.state.channels.map((obj, k)=>
-                             <option key={k} value={obj.id}>{obj.channel_name}</option>
+                             <option key={k} value={obj.id || ""}>{obj.channel_name || "--"}</option>
                          )}
                          
                      </select>
@@ -188,7 +187,7 @@ render() {
                             {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) && <a href="/events" >&nbsp;Your Events</a>}
                             {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) &&   <a href="/channels" >&nbsp;Your Channels</a>}
                                 <a href="/watchlists" >&nbsp;Your Watchlists</a>
-                                <a href="javascript:void" onClick={this._logout.bind(this)}>&nbsp;Logout</a>
+                                <Link to="javascript:void" onClick={this._logout.bind(this)}>&nbsp;Logout</Link>
                             </div>
                         </div>
                 </div>

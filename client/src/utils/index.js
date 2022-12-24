@@ -2,7 +2,7 @@ import Store from '../store';
 import { ACTION_TYPES } from './actions';
 import { CONFIGS } from "../config";
 import decode from 'jwt-decode';
-import moment from 'moment';
+// import moment from 'moment';
 
 export const Notification = (data)=>{
     Store.dispatch({ type:ACTION_TYPES.TOGGLE_NOTIFICATION, ...data});

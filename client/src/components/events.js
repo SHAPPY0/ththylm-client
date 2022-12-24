@@ -1,9 +1,8 @@
 import React, { Component } from 'react'; 
 import { withRouter, Link } from 'react-router-dom';
-import { Axios_Instance, Ax } from '../utils/axiosInterceptor';
+import { Axios_Instance} from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import { checkAuthorization, getUserDetails } from '../utils';
-import { BUILDING_REQ_VALIDATOR } from '../utils/validators';
 import {Notification, FormatDate, GetStatusByDateTime} from '../utils';
 
 class Events extends Component {
@@ -86,7 +85,7 @@ class Events extends Component {
     _onFormFieldChange(e){
         let { newEventValues, editedFields } = this.state;
         newEventValues[e.target.name] = e.target.value;
-        if(editedFields.indexOf(e.target.name) == -1) editedFields.push(e.target.name);
+        if(editedFields.indexOf(e.target.name) === -1) editedFields.push(e.target.name);
         this.setState({ newEventValues, editedFields });
     }
 
@@ -157,7 +156,7 @@ class Events extends Component {
                                     <div className="col-md-3 col-sm-3 col-xs-12" key={k}>
                                     <div className="card">
                                         <div className="thumbnail_logo">
-                                            {obj.thumbnail && <img src={`${BASEURL}${obj.thumbnail}`} />}
+                                            {obj.thumbnail && <img src={`${BASEURL}${obj.thumbnail}`} alt={obj.title} />}
                                             {!obj.thumbnail && <div style={{"height":"150px","width":"100%", "background":"#ccc","paddingTop":"25%", "color":"#96999c", "textAlign":"center"}}>No Thumbnail</div>}
                                             
                                            
@@ -227,7 +226,7 @@ class Events extends Component {
                                     </div>
                                     <div className="row" style={{"marginBottom":"10px"}}>
                                         <div className="col-md-4 col-sm-4"><b>Thumbnail : </b></div>
-                                        <div className="col-md-8 col-sm-8 thumbnail_logo"> <img src={`${BASEURL}${this.state.selectedEvent.thumbnail}`} style={{"height":"100px", "width":"50%"}} /></div>
+                                        <div className="col-md-8 col-sm-8 thumbnail_logo"> <img src={`${BASEURL}${this.state.selectedEvent.thumbnail}`} alt={'x'} style={{"height":"100px", "width":"50%"}} /></div>
                                     </div>
                                     <div style={{"marginBottom":"10px", "marginTop":"50px"}}>
                                     <button className="btn btn-primary" style={{"marginRight":"10px"}}>Edit Details</button>

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'; 
 import { withRouter, Link } from 'react-router-dom';
-import { Axios_Instance, Ax } from '../utils/axiosInterceptor';
+import { Axios_Instance } from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import { checkAuthorization, getUserDetails } from '../utils';
-import { BUILDING_REQ_VALIDATOR } from '../utils/validators';
 import {Notification, FormatDate, DateDiffFormat} from '../utils';
 
 class FeedPosts extends Component {
@@ -82,14 +81,13 @@ class FeedPosts extends Component {
     _onFormFieldChange(e){
         let { newFeedValues, editedFields } = this.state;
         newFeedValues[e.target.name] = e.target.value;
-        if(editedFields.indexOf(e.target.name) == -1) editedFields.push(e.target.name);
+        if(editedFields.indexOf(e.target.name) === -1) editedFields.push(e.target.name);
         this.setState({ newFeedValues, editedFields });
     }
 
     async updateFeed(){
         try{
             let { newFeedValues, editObj } = this.state;
-            console.log("nsnsnss", newFeedValues)
             let _resp = await Axios_Instance.put(`${ROUTES.update_feed}`.replace(":feedId", editObj.id), newFeedValues);
             if(_resp.data && _resp.data.success){
                 let { editedFields} = this.state;
@@ -146,7 +144,7 @@ class FeedPosts extends Component {
                                     <div className="col-md-4 col-sm-4 col-xs-12" key={k}>
                                         <div className="card" key={k} style={{"minHeight":"200px"}}>
                                             <div className="channelName" style={{"position":"relative"}}>
-                                                {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} alt={"test"} /> }
+                                                {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} alt={obj.channel_name[0]} /> }
                                                 {!obj.logo_url && <div className="blankLogo">{obj.channel_name[0]}</div>}
                                                 <p>{obj.channel_name}
                                                     <span> <i className="icon-options-vertical icons"  style={{"float":"right", "cursor":"pointer"}} onClick={this.openOptions.bind(this, k)}></i></span>
@@ -214,7 +212,7 @@ class FeedPosts extends Component {
                                     </div>
                                     <div className="row" style={{"marginBottom":"10px"}}>
                                         <div className="col-md-4 col-sm-4"><b>Thumbnail : </b></div>
-                                        <div className="col-md-8 col-sm-8 thumbnail_logo"> <img src={`${BASEURL}${this.state.selectedEvent.thumbnail}`} style={{"height":"100px", "width":"50%"}} /></div>
+                                        <div className="col-md-8 col-sm-8 thumbnail_logo"> <img src={`${BASEURL}${this.state.selectedEvent.thumbnail}`} alt="x" style={{"height":"100px", "width":"50%"}} /></div>
                                     </div>
                                     <div style={{"marginBottom":"10px", "marginTop":"50px"}}>
                                     <button className="btn btn-primary" style={{"marginRight":"10px"}}>Edit Details</button>

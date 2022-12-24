@@ -4,6 +4,7 @@ import { Axios } from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import {  CONFIGS} from '../config';
 import {Notification, getUserDetails} from '../utils';
+import GoogleAds from '../components/google-ads';
 
 class Signup extends Component {
     constructor(){
@@ -59,14 +60,14 @@ class Signup extends Component {
 
   render() {
             return (
-                <div className="inner-container">
+                <div className="main-container">
                     <div className="container">
                         <div className="row">
                         <div className="col-md-4 col-sm-4"></div>
                         <div className="col-md-4 col-sm-4">
                             <div className="logo_plain text-center"><img src={"./assets/images/logo.png"} alt="thePuerta"/></div>
                             <div className="card" style={{"marginTop":"20px"}}>
-                                
+                                <GoogleAds />
                             <div className="contctxt">User SIGNIN</div><br />
                             <div className="formint conForm">
                                 <form>

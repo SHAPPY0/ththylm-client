@@ -18,12 +18,13 @@ let instance = axios.create({
     return res;
   }, (err)=>{
     if(err && err.response){
-      if(err.response.status == 401){
+      if(err.response.status === 401){
         Notification({
           show:true,
-          data:{success:false, msg:err ? (err.response ? "Session expired, Please login again" : "Please login again"): "Session expired, Please login again!"}
+          data:{success:false, msg:err ? (err.response ? (err.response.statusText === 'Unauthorized' ? "Session expired, Please login again" : err.response.data.error) : "Please login again"): "Session expired, Please login again!"}
         });
-        // this.props.history.push('/');
+        localStorage.removeItem(CONFIGS.uLocal);
+        window.location = '/';
       }else{
         return err;
       }

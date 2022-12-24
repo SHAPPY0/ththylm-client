@@ -1,7 +1,7 @@
 import React, { Component } from 'react'; 
 import { withRouter } from 'react-router-dom';
-import { Axios_Instance, Ax } from '../utils/axiosInterceptor';
-import { BASEURL, ROUTES} from '../config/routes';
+import { Axios_Instance } from '../utils/axiosInterceptor';
+import {  ROUTES} from '../config/routes';
 import { checkAuthorization, getUserDetails } from '../utils';
 import { EVENT_REQ_VALIDATOR } from '../utils/validators';
 import {Notification, GetCacheSelectedChannel} from '../utils';
@@ -15,7 +15,6 @@ class AddEvents extends Component {
                 'type':'',
                 'title':'',
                 'url':'',
-                'description':'',
                 'start_time':'',
                 'expected_end_time':'',
                 'description':'',
