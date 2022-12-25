@@ -75,7 +75,7 @@ class Header extends Component {
                 channels = data; 
                 sessionStorage.setItem("selItem", channels.length ? channels[0].id : "");
                 sessionStorage.setItem("channels", JSON.stringify(channels));
-                this.props.setChannelsList(channels);
+               // this.props.setChannelsList(channels);
                 this.setState({ channels });
             }
         }catch(ex){
