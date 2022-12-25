@@ -75,6 +75,7 @@ class Header extends Component {
                 channels = data; 
                 sessionStorage.setItem("selItem", channels.length ? channels[0].id : "");
                 sessionStorage.setItem("channels", JSON.stringify(channels));
+                this.props.setChannelsList(channels);
                 this.setState({ channels });
             }
         }catch(ex){
@@ -169,7 +170,7 @@ render() {
             <div className="col-md-3 col-sm-3 col-xs-6">
                 <div className="pull-right">
                     {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) &&
-                         <select style={{"border":"none",  "background":'none'}} value={this.state.selectedChannel} name="channels" onChange={this.onChangeChannel.bind(this)}>
+                         <select style={{"border":"none",  "background":'none'}} value={this.state.selectedChannel || ""} name="channels" onChange={this.onChangeChannel.bind(this)}>
                          {this.state.channels.map((obj, k)=>
                              <option key={k} value={obj.id || ""}>{obj.channel_name || "--"}</option>
                          )}
@@ -187,7 +188,7 @@ render() {
                             {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) && <a href="/events" >&nbsp;Your Events</a>}
                             {(this.state.userDetails.user_type === 1 || this.state.userDetails.user_type === 3) &&   <a href="/channels" >&nbsp;Your Channels</a>}
                                 <a href="/watchlists" >&nbsp;Your Watchlists</a>
-                                <Link to="javascript:void" onClick={this._logout.bind(this)}>&nbsp;Logout</Link>
+                                <a href="javascript:void" onClick={this._logout.bind(this)}>&nbsp;Logout</a>
                             </div>
                         </div>
                 </div>

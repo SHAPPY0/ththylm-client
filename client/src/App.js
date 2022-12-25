@@ -42,10 +42,10 @@ class App extends Component {
       <Provider store={Store}>
         <Router>
           <AppContainer>
-          <Header channelsList={this.setChannelsList} />
+          <Header setChannelsList={this.setChannelsList} />
           <Switch> 
             <Route exact path='/' component={Signin} />
-            <Route exact path='/dashboard' component={Dashboard} />
+            <Route exact path='/dashboard' render={() =><Dashboard getChannelsList={this.getChannelsList.bind(this)}/>} />
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/add-channel-page' component={AddChannel} />
             <Route exact path='/add-events' component={AddEvents} />

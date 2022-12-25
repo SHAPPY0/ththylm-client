@@ -21,6 +21,8 @@ class Dashboard extends Component {
     }
 
     async componentDidMount(){
+        // setTimeout(()=> console.log(">>>>>>>>>>", this.props.getChannelsList),500);
+        
         await checkAuthorization(this.props);
         this.setWishTitle();
         let details = getUserDetails();
