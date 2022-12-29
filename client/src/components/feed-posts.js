@@ -32,7 +32,12 @@ class FeedPosts extends Component {
    
     async fetchFeeds(){
         try{
-            let _resp = await Axios_Instance.get(`${ROUTES.fetch_feeds_by_id}`);
+            let _resp = await Axios_Instance.get(`${ROUTES.fetch_feeds_by_id}`).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(!_resp){
                 Notification({
                     show:true,
@@ -88,7 +93,12 @@ class FeedPosts extends Component {
     async updateFeed(){
         try{
             let { newFeedValues, editObj } = this.state;
-            let _resp = await Axios_Instance.put(`${ROUTES.update_feed}`.replace(":feedId", editObj.id), newFeedValues);
+            let _resp = await Axios_Instance.put(`${ROUTES.update_feed}`.replace(":feedId", editObj.id), newFeedValues).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(_resp.data && _resp.data.success){
                 let { editedFields} = this.state;
                 editedFields = [];
@@ -115,7 +125,12 @@ class FeedPosts extends Component {
 
     async onDeleteFeed(id){
         try{
-            let _resp = await Axios_Instance.delete(`${ROUTES.delete_feed}`.replace(":deleteId", id));
+            let _resp = await Axios_Instance.delete(`${ROUTES.delete_feed}`.replace(":deleteId", id)).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             
             if(_resp && _resp.data && _resp.data.success){
                 Notification({

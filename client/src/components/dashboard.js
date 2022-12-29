@@ -30,6 +30,7 @@ class Dashboard extends Component {
         this.findSelectedChannel();
         this.fetchFeedPosts();
         this.fetchFeeds();
+        console.log("state", this.props.getChannelsList())
     };
 
     setWishTitle(){
@@ -47,20 +48,29 @@ class Dashboard extends Component {
     }; 
 
     findSelectedChannel(){
-        let { selectedChannel } = this.state;
-        // selectedChannel = {};
-        let selectedId = GetCacheSelectedChannel();
-        let channels = GetCacheChannels();
-        if(channels && channels.length){
-            selectedChannel = channels.find(obj => obj.id === selectedId);
+        setTimeout(()=>{
+            let { selectedChannel } = this.state;
+            // selectedChannel = {};
+            let selectedId = GetCacheSelectedChannel();
+            let channels = GetCacheChannels();
+            if(channels && channels.length){
+                selectedChannel = channels.find(obj => obj.id === selectedId);
+            };
+            if(Object.keys(selectedChannel).length === 0){
+                selectedChannel = this.props.getChannelsList().length ? this.props.getChannelsList()[0] :{};
+            } 
             this.setState({ selectedChannel });
-        } 
-        
+        }, 500);
     };
 
     async fetchFeeds(){
         try{
-            let _resp = await Axios_Instance.get(`${ROUTES.event_feeds}`);
+            let _resp = await Axios_Instance.get(`${ROUTES.event_feeds}`).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(!_resp){
                 _resp = {data:{success:false, msg:'Unexpected error occured'} };
                 return;
@@ -99,7 +109,12 @@ class Dashboard extends Component {
 
     async fetchFeedPosts(){
         try{
-            let _resp = await Axios_Instance.get(`${ROUTES.fetch_feeds}` );
+            let _resp = await Axios_Instance.get(`${ROUTES.fetch_feeds}` ).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             
             if(_resp && _resp.data && _resp.data.success){
                 let { feed_posts } = this.state;
@@ -133,7 +148,12 @@ class Dashboard extends Component {
                 "type":"text"
             };
         try{
-            let _resp = await Axios_Instance.post(`${ROUTES.post_feed}`,reqBody );
+            let _resp = await Axios_Instance.post(`${ROUTES.post_feed}`,reqBody ).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             
             if(_resp && _resp.data && _resp.data.success){
                 Notification({
@@ -212,7 +232,7 @@ class Dashboard extends Component {
                                                                 
                                                                 <p className="live_title" title={obj.title}>{obj.title.substring(0,27) || '--'}{obj.title.length > 27 &&<span>...</span>}</p>
                                                                 <p style={{"fontSize":"11px", "color":"#828b92"}}>{obj.channel_name || '--'}</p>
-                                                                <p style={{"fontSize":"10px"}}><span>{FormatDate(obj.start_time) || '--'}</span> - <span>{FormatDate(obj.expected_end_time) || '--'}</span> </p>
+                                                                <p style={{"fontSize":"10px"}}><span>Starts On {FormatDate(obj.start_time) || '--'}</span> </p>
                                                                 <div> 
                                                                     {obj.status === 'Running' &&  <button className="btn" style={{"fontSize":"10px"}} onClick={this.redirectUrl.bind(this, obj.url)}>Join Now</button>}
                                                                     {obj.status === 'Upcoming' &&  <span className="StatusWidget">Not Started Yet</span>}
@@ -239,7 +259,7 @@ class Dashboard extends Component {
                                                                 {!obj.thumbnail && <div style={{"height":"150px","width":"100%", "background":"#ccc","paddingTop":"25%", "color":"#96999c", "textAlign":"center"}}>No Thumbnail</div>}
                                                                 <p className="live_title">{obj.title || '--'}</p>
                                                                 <p style={{"fontSize":"11px"}}>{obj.channel_name || '--'}</p>
-                                                                <p style={{"fontSize":"10px"}}><span>{FormatDate(obj.start_time) || '--'}</span> - <span>{FormatDate(obj.expected_end_time) || '--'}</span> </p>
+                                                                <p style={{"fontSize":"10px"}}><span>Starts on {FormatDate(obj.start_time) || '--'}</span> </p>
                                                                  
                                                             </div>
                                                         </div>

@@ -32,7 +32,12 @@ class Events extends Component {
    
     async fetchEvents(){
         try{
-            let _resp = await Axios_Instance.get(`${ROUTES.fetch_events}`);
+            let _resp = await Axios_Instance.get(`${ROUTES.fetch_events}`).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(!_resp){
                 Notification({
                     show:true,
@@ -98,7 +103,12 @@ class Events extends Component {
             };
            
             fd.append("edited_fields", editedFields);
-            let _resp = await Axios_Instance.put(`${ROUTES.update_event}`, fd);
+            let _resp = await Axios_Instance.put(`${ROUTES.update_event}`, fd).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(_resp.data && _resp.data.success){
                 let { editedFields} = this.state;
                 editedFields = [];
@@ -125,7 +135,12 @@ class Events extends Component {
 
     async onDeleteEvent(id){
         try{
-            let _resp = await Axios_Instance.delete(`${ROUTES.delete_event}`.replace(":eventId", id));
+            let _resp = await Axios_Instance.delete(`${ROUTES.delete_event}`.replace(":eventId", id)).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             
             if(_resp && _resp.data && _resp.data.success){
                 Notification({

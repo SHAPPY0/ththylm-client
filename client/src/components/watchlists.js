@@ -28,7 +28,12 @@ class Channles extends Component {
    
     async fetchChannels(){
         try{
-            let _resp = await Axios_Instance.get(`${ROUTES.fetch_watchlist}`);
+            let _resp = await Axios_Instance.get(`${ROUTES.fetch_watchlist}`).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(!_resp ){
                 _resp = {data:{success:false, msg:'Unexpected error occured'} };
                 return;
@@ -79,7 +84,12 @@ class Channles extends Component {
 
     async onRemoveFromWatchList(channelId){
         try{
-            let _resp = await Axios_Instance.put(`${ROUTES.remove_watchlist}`.replace(":channelId", channelId));
+            let _resp = await Axios_Instance.put(`${ROUTES.remove_watchlist}`.replace(":channelId", channelId)).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             
             if(_resp && _resp.data && _resp.data.success){
                 Notification({

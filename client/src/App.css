@@ -121,9 +121,9 @@ p{
   display: inline;
 }
 .search_results{
-  width: 60%;
+  width: 100%;
   position: absolute;
-  top: 31px;
+  top: 33px;
   right: 0px;
   background-color: #fff;
   min-height: 200px;
@@ -364,12 +364,31 @@ p{
   /* font-weight: 600; */
   color:#8f8f8f
 }
-.copy_bId{
-  margin-left: 10px;
+.search_bar{
+  position: relative;
+  width: 70%;
+}
+
+.search_bar .searchIcon {
+    position: absolute;
+    top: 1px;
+    background: #fff;
+    left: 1px;
+    padding: 9px;
+    border-radius: 4px;
+    color:#ccc;
 }
 
 .footer{
   background-color: #fff;
   padding:10px 0px;
   color: rgb(176, 172, 172);
+}
+
+@media screen and (max-width: 768px){
+    .search_bar{
+      margin: 10px 0px;
+      width:100%      
+    }
+  
 }

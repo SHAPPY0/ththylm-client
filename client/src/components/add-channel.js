@@ -63,7 +63,12 @@ class AddChannels extends Component {
         //     return;
         // } 
         try{
-            let _resp = await Axios_Instance.post(`${ROUTES.add_channel}`,fd);
+            let _resp = await Axios_Instance.post(`${ROUTES.add_channel}`,fd).catch(ex=>{
+                        Notification({
+                            show: true,
+                            data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                        });
+                    });
             if(!_resp){
                 _resp = {data:{success:false, msg:'Unexpected erro occured'} };
                 return;

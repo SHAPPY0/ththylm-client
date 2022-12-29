@@ -52,20 +52,38 @@ class AddEvents extends Component {
               });
               return;
         }
+        form.start_time = new Date(form.start_time).toISOString();
+        form.expected_end_time = new Date(form.expected_end_time).toISOString();
+        if(form.start_time >= form.expected_end_time){
+            Notification({
+                show: true,
+                data:{success:false, msg:'End time should be greater than Start time '}
+              });
+              return;
+        }
         let fd = new FormData();
         for( let k  in form){
             fd.append(k,form[k]);
         };
         try{
-            let _resp = await Axios_Instance.post(`${ROUTES.add_events}`,fd);
+            let _resp = await Axios_Instance.post(`${ROUTES.add_events}`,fd)
+                            .catch(ex=>{
+                                Notification({
+                                    show: true,
+                                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                                  });
+                            });
             if(!_resp ){
                 _resp = {data:{success:false, msg:'Unexpected erro occured'} };
                 return;
             }
-            Notification({
-                show: true,
-                data:{success:_resp.data.success, msg:_resp.data.message || _resp.data.msg}
-              });
+            if(_resp){
+                Notification({
+                    show: true,
+                    data:{success:_resp.data.success, msg:_resp.data.message || _resp.data.msg}
+                  });
+            }
+           
             //   this.props.history.push('/channels');
         }catch(ex){
             Notification({

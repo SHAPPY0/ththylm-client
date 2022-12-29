@@ -24,7 +24,9 @@ class App extends Component {
     super(); 
       this.state = {
         "channelsList":[]
-      }
+      };
+      this.getChannelsList = this.getChannelsList.bind(this);
+      this.setChannelsList = this.setChannelsList.bind(this);
   } 
 
   setChannelsList(d){
@@ -45,7 +47,7 @@ class App extends Component {
           <Header setChannelsList={this.setChannelsList} />
           <Switch> 
             <Route exact path='/' component={Signin} />
-            <Route exact path='/dashboard' render={() =><Dashboard getChannelsList={this.getChannelsList.bind(this)}/>} />
+            <Route exact path='/dashboard' render={() =><Dashboard state={this.state} getChannelsList={this.getChannelsList}/>} />
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/add-channel-page' component={AddChannel} />
             <Route exact path='/add-events' component={AddEvents} />

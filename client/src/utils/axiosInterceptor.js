@@ -26,7 +26,7 @@ let instance = axios.create({
         localStorage.removeItem(CONFIGS.uLocal);
         window.location = '/';
       }else{
-        return err;
+        return Promise.reject(err);
       }
     }
   });

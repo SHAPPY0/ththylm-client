@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Axios_Instance} from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
-import { checkAuthorization, DateDiffFormat, FormatDate, getUserDetails } from '../utils';
+import { checkAuthorization, DateDiffFormat, FormatDate, getUserDetails, SetCacheSelectedChannel, GetCacheSelectedChannel } from '../utils';
 import {Notification} from '../utils';
 
 class Channles extends Component {
@@ -14,21 +14,29 @@ class Channles extends Component {
                 "response":[],
                 "selectedChannel":{}
             },
+            "selItem":"",
             "showOption":-1
         }
     }
 
     componentDidMount(){
+        let { user, selItem } = this.state;
         checkAuthorization(this.props);
-        let details = getUserDetails();
-        this.setState({user:details});
+        selItem = GetCacheSelectedChannel();
+        user = getUserDetails();
+        this.setState({user, selItem});
         this.fetchChannels();
     }; 
  
    
     async fetchChannels(){
         try{
-            let _resp = await Axios_Instance.get(`${ROUTES.fetch_channels}`);
+            let _resp = await Axios_Instance.get(`${ROUTES.fetch_channels}`).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             if(!_resp ){
                 _resp = {data:{success:false, msg:'Unexpected error occured'} };
                 return;
@@ -79,7 +87,12 @@ class Channles extends Component {
     }
     async onDeleteFeed(id){
         try{
-            let _resp = await Axios_Instance.delete(`${ROUTES.delete_channel}`.replace(":channelId", id));
+            let _resp = await Axios_Instance.delete(`${ROUTES.delete_channel}`.replace(":channelId", id)).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
             
             if(_resp && _resp.data && _resp.data.success){
                 Notification({
@@ -91,6 +104,19 @@ class Channles extends Component {
             Notification({
                 show:true,
                 data:ex ? (ex.response ?ex.response.data : ex) : "Exception ocurred"});
+        }
+    }
+
+    setAsDefault(obj){
+        if(obj.id){
+            let { showOption } = this.state;
+           SetCacheSelectedChannel(obj.id);
+           Notification({
+                show:true,
+                data:{success:true, msg:"Channel set as default"}
+            });
+            showOption = -1;
+            this.setState({ showOption });
         }
     }
 
@@ -124,6 +150,8 @@ class Channles extends Component {
                                                 {k === this.state.showOption && <div className="optionsDropDown" style={{"top":"15px", "width":"100px"}}>
                                                     <ul>
                                                         {/* <li onClick={this.onEditObj.bind(this, obj)}>Edit Feed</li> */}
+                                                       {this.state.selItem === obj.id && <li style={{"color":"green"}}><i className="icon-check"></i> Default</li>}
+                                                       {this.state.selItem !== obj.id && <li onClick={this.setAsDefault.bind(this, obj)}>Set Default</li>} 
                                                         <li onClick={this.onDeleteObj.bind(this, obj)}>Delete Channel</li>
                                                     </ul>
                                                 </div>}

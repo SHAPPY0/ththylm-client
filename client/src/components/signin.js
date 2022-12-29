@@ -1,9 +1,9 @@
 import React, { Component } from 'react'; 
 import { withRouter,Link } from 'react-router-dom';
-import { Axios } from '../utils/axiosInterceptor';
+import { Axios, Axios_Instance } from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import {  CONFIGS} from '../config';
-import {Notification, getUserDetails} from '../utils';
+import {Notification, getUserDetails, SetCacheSelectedChannel} from '../utils';
 import GoogleAds from '../components/google-ads';
 
 class Signup extends Component {
@@ -43,6 +43,7 @@ class Signup extends Component {
 
           if(_resp && _resp.data &&_resp.data.success){
               localStorage.setItem(CONFIGS.uLocal, _resp.data.data.token);
+              this.fetchChannels();
               this.props.history.push('/dashboard');
           }else{
             Notification({
@@ -57,6 +58,29 @@ class Signup extends Component {
         });}
     
       };
+
+      async fetchChannels(){
+        try{
+            let _resp = await Axios_Instance.get(`${ROUTES.fetch_channels}`).catch(ex=>{
+                Notification({
+                    show: true,
+                    data:{success: false, msg:ex.response.data.error || "something went wrong"}
+                  });
+            });
+            if(!_resp){
+                return;
+            }
+            if(_resp &&_resp.data && _resp.data.success){
+                let channels = _resp.data.data.channels;
+                SetCacheSelectedChannel( channels.length ? channels[0].id : "");
+                sessionStorage.setItem("channels", JSON.stringify(channels));
+            }
+        }catch(ex){
+            Notification({
+                show:true,
+                data:ex.response ?ex.response.data : ex});
+        } 
+    }
 
   render() {
             return (

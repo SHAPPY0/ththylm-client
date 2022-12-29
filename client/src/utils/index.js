@@ -74,28 +74,24 @@ export const DateDiffFormat = (datetime)=>{
 export const GetStatusByDateTime = (startTime, endTime) => {
     if(!startTime) return startTime;
     if(!endTime) return endTime;
-    if(new Date(startTime).setHours(0,0,0,0) <= new Date().setHours(0,0,0,0)){
-        if(new Date(endTime).setHours(0,0,0,0) >= new Date().setHours(0,0,0,0)){
-            if(new Date(startTime) <= new Date() ){
-                if(new Date(endTime) >= new Date()){
-                    return "Running";
-                }else{
-                    return "Ended";
-                }
-            }else{
-                return "Upcoming";
-            }
+    if(new Date(startTime) <= new Date()){
+        if(new Date(endTime) >= new Date()){
+            return "Running";
         }else{
             return "Ended";
         }
-    }else{
+    }else if(new Date(startTime) > new Date()){
         return "Upcoming";
     }
 }
 
 export const GetCacheSelectedChannel = () =>{
-        let r = sessionStorage.getItem("selItem");
+        let r = localStorage.getItem("selItem");
         return r;
+}
+export const SetCacheSelectedChannel = (d) =>{
+    let r = localStorage.setItem("selItem", d);
+    return r;
 }
 export const GetCacheChannels = () =>{
     let r = sessionStorage.getItem("channels");
