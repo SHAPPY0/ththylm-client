@@ -368,7 +368,11 @@ p{
   position: relative;
   width: 70%;
 }
-
+.cbadge{
+  font-size: 9px;
+    background: #33638a47;
+    color: #135388;
+}
 .search_bar .searchIcon {
     position: absolute;
     top: 1px;

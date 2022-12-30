@@ -157,6 +157,7 @@ class Channles extends Component {
                                                 </div>}
                                             </div>
                                             <small style={{display:"block", "color":"rgb(178 174 174)"}}>{obj.type} | {obj.platform}</small>
+                                            <small style={{display:"block", "color":"rgb(178 174 174)"}}>Watchers: {obj.watchers || 0}</small>
                                             {/* <Link to={"/add-events"} style={{"fontSize":"10px"}}>Add Event</Link> */}
                                             <small style={{display:"block", "color":"rgb(178 174 174)"}}> {DateDiffFormat(obj.created_at)}</small>
                                         </div>
@@ -188,6 +189,10 @@ class Channles extends Component {
                                     <div className="row" style={{"marginBottom":"10px"}}>
                                         <div className="col-md-4 col-sm-4"><b>Channel Name : </b></div>
                                         <div className="col-md-8 col-sm-8">{this.state.selectedChannel.channel_name || '--'}</div>
+                                    </div>
+                                    <div className="row" style={{"marginBottom":"10px"}}>
+                                        <div className="col-md-4 col-sm-4"><b>Watchers : </b></div>
+                                        <div className="col-md-8 col-sm-8">{this.state.selectedChannel.watchers || 0}</div>
                                     </div>
                                     <div className="row" style={{"marginBottom":"10px"}}>
                                         <div className="col-md-4 col-sm-4"><b>Channel Url : </b></div>

@@ -6,6 +6,8 @@ import { checkAuthorization, getUserDetails,
         FormatDate, GetStatusByDateTime, 
         Notification,DateDiffFormat, 
         GetCacheSelectedChannel, GetCacheChannels } from '../utils';
+import GoogleAds from '../components/google-ads';
+
 
 class Dashboard extends Component {
     constructor(){
@@ -179,6 +181,7 @@ class Dashboard extends Component {
             return (
                 <div className="main-container">
                     <div className="container">
+                        <GoogleAds />
                         <h4 className="page-title">
                             <p style={{'textTransform':'capitalize'}}>{this.state.wishTitle}! {this.state.user.first_name || 'Guest'}</p>
                         </h4> 
@@ -232,7 +235,7 @@ class Dashboard extends Component {
                                                                 
                                                                 <p className="live_title" title={obj.title}>{obj.title.substring(0,27) || '--'}{obj.title.length > 27 &&<span>...</span>}</p>
                                                                 <p style={{"fontSize":"11px", "color":"#828b92"}}>{obj.channel_name || '--'}</p>
-                                                                <p style={{"fontSize":"10px"}}><span>Starts On {FormatDate(obj.start_time) || '--'}</span> </p>
+                                                                <p style={{"fontSize":"10px"}}><span>{obj.status === 'Running' && 'Started'} {obj.status !== 'Running' && 'Starts'} at: {FormatDate(obj.start_time) || '--'}</span> </p>
                                                                 <div> 
                                                                     {obj.status === 'Running' &&  <button className="btn" style={{"fontSize":"10px"}} onClick={this.redirectUrl.bind(this, obj.url)}>Join Now</button>}
                                                                     {obj.status === 'Upcoming' &&  <span className="StatusWidget">Not Started Yet</span>}
@@ -259,7 +262,7 @@ class Dashboard extends Component {
                                                                 {!obj.thumbnail && <div style={{"height":"150px","width":"100%", "background":"#ccc","paddingTop":"25%", "color":"#96999c", "textAlign":"center"}}>No Thumbnail</div>}
                                                                 <p className="live_title">{obj.title || '--'}</p>
                                                                 <p style={{"fontSize":"11px"}}>{obj.channel_name || '--'}</p>
-                                                                <p style={{"fontSize":"10px"}}><span>Starts on {FormatDate(obj.start_time) || '--'}</span> </p>
+                                                                <p style={{"fontSize":"10px"}}><span>{obj.status === 'Running' && 'Started'} {obj.status !== 'Running' && 'Starts'} at: {FormatDate(obj.start_time) || '--'}</span> </p>
                                                                  
                                                             </div>
                                                         </div>

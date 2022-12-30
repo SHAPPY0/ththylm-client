@@ -80,9 +80,9 @@ class Header extends Component {
                 let { channels } = this.state;
                 let data = _resp.data.data.channels;
                 channels = data; 
-                localStorage.setItem("selItem", channels.length ? channels[0].id : "");
+                SetCacheSelectedChannel(channels.length ? channels[0].id : "");
                 sessionStorage.setItem("channels", JSON.stringify(channels));
-               this.props.setChannelsList(channels);
+                this.props.setChannelsList(channels);
                 this.setState({ channels });
             }
         }catch(ex){
@@ -173,10 +173,10 @@ render() {
                                 <div className="search_results">
                                    {this.state.search_results.map((obj, k)=>
                                     <div className="EachSearchResult" key={k}>
-                                        {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} alt={obj.channel_name[0]} style={{"width":"50px", "height":"50px","float":"left","objectFit":"contain"}} />}
+                                        {obj.logo_url && <img src={`${BASEURL}${obj.logo_url}`} alt={obj.channel_name[0]} style={{"width":"50px", "height":"50px","float":"left","objectFit":"contain","borderRadius":"50%"}} />}
                                         {!obj.logo_url && <div className="blankImage" style={{"width":"50px", "height":"50px", "float":"left", "fontSize":"25px"}}>{obj.channel_name[0]}</div>}
                                         <div className="SearchRow">
-                                            <p style={{"fontSize":"12px", "color":"#145391"}}><span onClick={this.redirectURL.bind(this, obj.channel_url)} className="theme-color" style={{"cursor":"pointer"}}>{obj.channel_name || '--'}</span></p>
+                                            <p style={{"fontSize":"12px", "color":"#145391"}}><span onClick={this.redirectURL.bind(this, obj.channel_url)} className="theme-color" style={{"cursor":"pointer"}}>{obj.channel_name || '--'}</span>  <span className="badge cbadge">{obj.watchers || 0}</span></p>
                                             <p style={{"fontSize":"10px"}}>{obj.type || '--'} | {obj.platform || '--'}</p>
                                             <p style={{"fontSize":"10px"}}>
                                                 {obj.added_watchlist === 1 && 

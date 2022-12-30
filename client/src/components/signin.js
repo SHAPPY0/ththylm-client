@@ -4,7 +4,6 @@ import { Axios, Axios_Instance } from '../utils/axiosInterceptor';
 import { BASEURL, ROUTES} from '../config/routes';
 import {  CONFIGS} from '../config';
 import {Notification, getUserDetails, SetCacheSelectedChannel} from '../utils';
-import GoogleAds from '../components/google-ads';
 
 class Signup extends Component {
     constructor(){
@@ -111,7 +110,7 @@ class Signup extends Component {
                                 </form>
                             </div>
                             </div>
-                            <GoogleAds />
+                           
                         </div>
                         <div className="col-md-4 col-sm-4"></div>
                         </div>
